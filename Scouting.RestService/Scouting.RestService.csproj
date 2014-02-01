@@ -148,7 +148,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Scouting.DataLayer\Scouting.DataLayer.csproj">
       <Project>{149220F5-0335-4824-9342-3F9C4EAF5BDE}</Project>
-      <Name>DataLayer</Name>
+      <Name>Scouting.DataLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
