@@ -8,7 +8,7 @@ namespace Scouting.RestService.Api
     {
         public object Get(PlayerGetAllRequest request)
         {
-            var players = new Repository<Player>().GetAll();
+            var players = new Repository<Player>().GetAll(); // TODO: Get Repository<T> through IOC.
 
             return new PlayerGetAllResponse { Players = players };
         }
