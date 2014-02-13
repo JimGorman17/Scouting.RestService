@@ -8,7 +8,7 @@ namespace Scouting.DataLayer
 {
     public class Repository<T> : IRepository<T> where T : IEntity
     {
-        private readonly Database _db = new Database("localDB"); // TODO: Use IOC
+        protected readonly Database _db = new Database("localDB"); // TODO: Use IOC
 
         public T Find(int id)
         {
