@@ -7,7 +7,7 @@ namespace Scouting.DataLayer
     {
         public List<Player> GetAllByTeamAbbreviation(string teamAbbreviation)
         {
-            return _db.Query<Player>("WHERE Team = @0", teamAbbreviation).ToList();
+            return Db.Query<Player>("WHERE Team = @0", teamAbbreviation).ToList();
         }
     }
 }
