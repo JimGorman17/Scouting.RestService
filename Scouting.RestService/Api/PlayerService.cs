@@ -13,7 +13,7 @@ namespace Scouting.RestService.Api
             return new PlayerGetAllByTeamAbbreviationResponse { Players = players };
         }
 
-        [Route("/Player/GetAllByTeamIdRequest")]
+        [Route("/Player/GetAllByTeamId")]
         public class PlayerGetAllByTeamIdRequest
         {
             public int TeamId { get; set; }
