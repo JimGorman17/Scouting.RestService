@@ -24,7 +24,7 @@ namespace Scouting.RestService
 
         public class AppHost : AppHostBase
         {
-            public AppHost() : base("Hello Web Services", typeof(HelloService).Assembly)
+            public AppHost() : base("Hello Web Services", typeof(TeamService).Assembly)
             {
                 
             }

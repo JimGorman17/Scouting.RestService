@@ -6,17 +6,17 @@ namespace Scouting.RestService.Api
 {
     public class PlayerService : Service
     {
-        public object Get(PlayerGetAllByTeamAbbreviationRequest playerRequest)
+        public object Get(PlayerGetAllByTeamIdRequest playerRequest)
         {
-            var players = new PlayerRepository().GetAllByTeamAbbreviation(playerRequest.TeamAbbreviation); // TODO: Get Repository<T> through IOC.
+            var players = new PlayerRepository().GetAllByTeamId(playerRequest.TeamId); // TODO: Get Repository<T> through IOC.
 
             return new PlayerGetAllByTeamAbbreviationResponse { Players = players };
         }
 
-        [Route("/Player/GetAllByTeamAbbreviationRequest")]
-        public class PlayerGetAllByTeamAbbreviationRequest
+        [Route("/Player/GetAllByTeamIdRequest")]
+        public class PlayerGetAllByTeamIdRequest
         {
-            public string TeamAbbreviation { get; set; }
+            public int TeamId { get; set; }
         }
 
         public class PlayerGetAllByTeamAbbreviationResponse
