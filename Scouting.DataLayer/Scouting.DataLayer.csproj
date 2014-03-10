@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthToken.cs" />
+    <Compile Include="AuthTokenRepository.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IRepository.cs" />
