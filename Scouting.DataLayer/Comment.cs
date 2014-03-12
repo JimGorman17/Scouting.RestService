@@ -1,4 +1,5 @@
-﻿using Scouting.DataLayer.Models;
+﻿using System;
+using Scouting.DataLayer.Models;
 
 namespace Scouting.DataLayer
 {
@@ -8,10 +9,12 @@ namespace Scouting.DataLayer
     {
         public int CommentId { get; set; }
         public int PlayerId { get; set; }
-        public int GoogleId { get; set; }
+        public string GoogleId { get; set; }
         [Column("Comment")]
         public string CommentString { get; set; }
         public bool Deleted { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset? UpdateDate { get; set; }
 
         [Ignore]
         public bool IsNew

@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ServiceStack">
       <HintPath>..\packages\ServiceStack.4.0.8\lib\net40\ServiceStack.dll</HintPath>
@@ -123,6 +129,8 @@
     <Compile Include="Api\PlayerService.cs" />
     <Compile Include="Api\HttpStatusResult.cs" />
     <Compile Include="Api\TeamService.cs" />
+    <Compile Include="ApplicationSettingsKeys.cs" />
+    <Compile Include="Dtos\GooglePlusLoginDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -132,8 +140,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll">
+      <Link>AutoMapper.Net4.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
