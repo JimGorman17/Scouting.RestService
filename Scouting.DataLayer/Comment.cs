@@ -25,4 +25,11 @@ namespace Scouting.DataLayer
             }
         }
     }
+
+    public class CommentView : Comment
+    {
+        public int UserId { get; set; }
+        public string DisplayName { get; set; }
+        public string Picture { get; set; }
+    }
 }
