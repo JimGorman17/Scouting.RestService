@@ -53,7 +53,7 @@ namespace Scouting.RestService.Api
                 {
                     PlayerId = request.PlayerId,
                     GoogleId = googleId,
-                    CommentString = request.CommentString,
+                    CommentString = request.CommentString.Trim(),
                     CreateDate = DateTimeOffset.Now
                 });
 
