@@ -49,6 +49,5 @@ namespace Scouting.RestService.Api
 
             return new TeamGetClosestTeamResponse { Team = nearest };
         }
-
     }
 }
