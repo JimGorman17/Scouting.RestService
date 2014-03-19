@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.SqlServer.Types;
 using Scouting.DataLayer;
@@ -42,7 +43,9 @@ namespace Scouting.RestService.Api
             var givenPoint = SqlGeography.Point(request.Latitude, request.Longitude, 4326);
             var allTeams = new Repository<Team>().GetAll(); // TODO: Get Repository<T> through IOC.
 
-            var nearest = allTeams.OrderBy(t => t.CenterPoint.STDistance(givenPoint)).First();
+            var nearest = allTeams.OrderBy(t => t.CenterPoint.STDistance(givenPoint))
+                .ThenBy(t => Guid.NewGuid()) // Randomize so that we can give the NY Giants and the NY Jets both an equal chance.
+                .First();
 
             return new TeamGetClosestTeamResponse { Team = nearest };
         }
