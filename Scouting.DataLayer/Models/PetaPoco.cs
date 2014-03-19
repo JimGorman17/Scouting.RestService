@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -27,6 +28,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Microsoft.SqlServer.Types;
 using Scouting.DataLayer.Models.DatabaseTypes;
 using Scouting.DataLayer.Models.Internal;
 
@@ -3739,6 +3741,10 @@ namespace Scouting.DataLayer.Models
 					{
 						return delegate(object src) { return EnumMapper.EnumFromString(dstType, (string)src); };
 					}
+                    else if (dstType == typeof(SqlGeography))
+                    {
+                        return src => SqlGeography.STPointFromText(new SqlChars(src.ToString()), int.Parse(src.GetType().GetProperty("STSrid").GetValue(src, null).ToString()));
+                    }
 					else
 					{
 						return delegate(object src) { return Convert.ChangeType(src, dstType, null); };

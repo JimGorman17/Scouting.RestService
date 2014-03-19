@@ -22,6 +22,8 @@ namespace Scouting.RestService
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
+            //SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin")); The NuGet documentation said that this might be necessary.
+
             Mapper.CreateMap<GooglePlusLoginDto, User>()
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreateDate, opt => opt.Ignore())

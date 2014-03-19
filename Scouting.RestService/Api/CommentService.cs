@@ -22,19 +22,19 @@ namespace Scouting.RestService.Api
             public List<CommentView> Comments { get; set; }
         }
 
+        public object Get(CommentGetAllByPlayerIdRequest commentRequest)
+        {
+            var comments = new CommentRepository().GetAllByPlayerId(commentRequest.PlayerId); // TODO: Get Repository<T> through IOC.
+
+            return new CommentGetAllByPlayerIdResponse { Comments = comments };
+        }
+
         [Route("/Comment/Create")]
         public class CommentCreateRequest
         {
             public string AuthToken { get; set; }
             public int PlayerId { get; set; }
             public string CommentString { get; set; }
-        }
-
-        public object Get(CommentGetAllByPlayerIdRequest commentRequest)
-        {
-            var comments = new CommentRepository().GetAllByPlayerId(commentRequest.PlayerId); // TODO: Get Repository<T> through IOC.
-
-            return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
 
         public object Post(CommentCreateRequest request)
