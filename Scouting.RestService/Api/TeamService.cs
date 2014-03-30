@@ -26,7 +26,7 @@ namespace Scouting.RestService.Api
             return new TeamGetAllResponse { Teams = teams };
         }
 
-        [Route("/Team/GetClosestTeamRequest")]
+        [Route("/Team/GetClosestTeam")]
         public class TeamGetClosestTeamRequest
         {
             public double Latitude { get; set; }
