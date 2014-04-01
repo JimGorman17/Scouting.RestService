@@ -35,7 +35,8 @@ namespace Scouting.RestService
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.link))
                 .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.picture))
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.gender))
-                .ForMember(dest => dest.Locale, opt => opt.MapFrom(src => src.locale));
+                .ForMember(dest => dest.Locale, opt => opt.MapFrom(src => src.locale))
+                .ForMember(dest => dest.FavoriteTeamId, opt => opt.Ignore());
 
             Mapper.AssertConfigurationIsValid();
 

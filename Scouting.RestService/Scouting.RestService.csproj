@@ -133,6 +133,7 @@
     <Compile Include="Api\PlayerService.cs" />
     <Compile Include="Api\HttpStatusResult.cs" />
     <Compile Include="Api\TeamService.cs" />
+    <Compile Include="Api\UserService.cs" />
     <Compile Include="ApplicationSettingsKeys.cs" />
     <Compile Include="Dtos\GooglePlusLoginDto.cs" />
     <Compile Include="Global.asax.cs">
