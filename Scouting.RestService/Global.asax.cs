@@ -3,6 +3,7 @@ using System.Web.Routing;
 using AutoMapper;
 using Funq;
 using Scouting.DataLayer;
+using Scouting.DataLayer.Models;
 using Scouting.RestService.Api;
 using Scouting.RestService.App_Start;
 using Scouting.RestService.Dtos;
@@ -53,6 +54,14 @@ namespace Scouting.RestService
             public override void Configure(Container container)
             {
                 SetConfig(new HostConfig { HandlerFactoryPath = "api" });
+
+                container.Register(c => new Database("localDB"));
+                container.RegisterAutoWired<CommentRepository>();
+                container.RegisterAutoWired<PlayerRepository>();
+                container.RegisterAutoWired<Repository<Team>>();
+                container.RegisterAutoWired<UserRepository>();
+
+                container.RegisterAutoWired<AuthTokenRepository>();
             }
 
             // TODO: Configure error logging.

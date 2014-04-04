@@ -9,6 +9,8 @@ namespace Scouting.RestService.Api
 {
     public class TeamService : Service
     {
+        public Repository<Team> TeamRepository { get; set; }
+
         [Route("/Team/GetAll")]
         public class TeamGetAllRequest
         {
@@ -21,7 +23,7 @@ namespace Scouting.RestService.Api
 
         public object Get(TeamGetAllRequest request)
         {
-            var teams = new Repository<Team>().GetAll(); // TODO: Get Repository<T> through IOC.
+            var teams = TeamRepository.GetAll();
 
             return new TeamGetAllResponse { Teams = teams };
         }
@@ -41,7 +43,7 @@ namespace Scouting.RestService.Api
         public object Get(TeamGetClosestTeamRequest request)
         {
             var givenPoint = SqlGeography.Point(request.Latitude, request.Longitude, 4326);
-            var allTeams = new Repository<Team>().GetAll(); // TODO: Get Repository<T> through IOC.
+            var allTeams = TeamRepository.GetAll();
 
             var nearest = allTeams.OrderBy(t => t.CenterPoint.STDistance(givenPoint))
                 .ThenBy(t => Guid.NewGuid()) // Randomize so that we can give the NY Giants and the NY Jets both an equal chance.

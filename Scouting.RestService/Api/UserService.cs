@@ -10,6 +10,9 @@ namespace Scouting.RestService.Api
 {
     public class UserService : Service
     {
+        public UserRepository UserRepository { get; set; }
+        public AuthTokenRepository AuthTokenRepository { get; set; }
+
         [Route("/User/UpdateFavoriteTeam")]
         public class UserUpdateFavoriteTeamRequest
         {
@@ -19,31 +22,29 @@ namespace Scouting.RestService.Api
 
         public object Post(UserUpdateFavoriteTeamRequest request)
         {
-            var googleId = GetGoogleId(request.AuthToken);
+            var googleId = GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
 
             if (request.TeamId <= 0)
             {
                 throw new ArgumentOutOfRangeException("FavoriteTeamId");
             }
 
-            var userRepository = new UserRepository(); // TODO: Get Repository<T> through IOC.
-            var existingUser = userRepository.GetUserByGoogleId(googleId);
+            var existingUser = UserRepository.GetUserByGoogleId(googleId);
             
             existingUser.FavoriteTeamId = request.TeamId;
-            userRepository.Update(existingUser);
+            UserRepository.Update(existingUser);
 
             return new HttpStatusResult(HttpStatusCode.OK);
         }
 
-        public static string GetGoogleId(string authToken)
+        public static string GetGoogleId(string authToken, AuthTokenRepository authTokenRepository, UserRepository userRepository)
         {
-            var authTokenRepository = new AuthTokenRepository(); // TODO: Get Repository<T> through IOC.
             var googleId = authTokenRepository.GetGoogleIdByAuthToken(authToken);
             if (googleId == null)
             {
                 var user = RecordTheAuthTokenInTheDatabase(authToken, authTokenRepository);
                 googleId = user.GoogleId;
-                AddOrUpdateTheUser(user);
+                AddOrUpdateTheUser(user, userRepository);
             }
             return googleId;
         }
@@ -88,9 +89,8 @@ namespace Scouting.RestService.Api
             return String.IsNullOrEmpty(jsonData) ? new GooglePlusLoginDto() : JsonConvert.DeserializeObject<GooglePlusLoginDto>(jsonData);
         }
 
-        private static void AddOrUpdateTheUser(User user)
+        private static void AddOrUpdateTheUser(User user, UserRepository userRepository)
         {
-            var userRepository = new UserRepository(); // TODO: Get Repository<T> through IOC.
             var existingUser = userRepository.GetUserByGoogleId(user.GoogleId);
             if (existingUser == null)
             {

@@ -10,6 +10,11 @@ namespace Scouting.RestService.Api
 {
     public class CommentService : Service
     {
+        public Database Database { get; set; }
+        public CommentRepository CommentRepository { get; set; }
+        public AuthTokenRepository AuthTokenRepository { get; set; }
+        public UserRepository UserRepository { get; set; }
+
         [Route("/Comment/GetAllByPlayerId")]
         public class CommentGetAllByPlayerIdRequest
         {
@@ -23,7 +28,7 @@ namespace Scouting.RestService.Api
 
         public object Get(CommentGetAllByPlayerIdRequest commentRequest)
         {
-            var comments = new CommentRepository().GetAllByPlayerId(commentRequest.PlayerId); // TODO: Get Repository<T> through IOC.
+            var comments = CommentRepository.GetAllByPlayerId(commentRequest.PlayerId);
 
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
@@ -38,10 +43,9 @@ namespace Scouting.RestService.Api
 
         public object Post(CommentCreateRequest request)
         {
-            var googleId = UserService.GetGoogleId(request.AuthToken);
+            var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
 
-            var commentRepository = new CommentRepository(); // TODO: Get Repository<T> through IOC.
-            commentRepository.Add(new Comment
+            CommentRepository.Add(new Comment
                 {
                     PlayerId = request.PlayerId,
                     GoogleId = googleId,
@@ -65,9 +69,7 @@ namespace Scouting.RestService.Api
 
         public object Get(CommentGetTotalsByTeamRequest request)
         {
-            Database db = new Database("localDB"); // TODO: Use IOC
-
-            var results = db.Query<TeamCommentRow>("SELECT T.Location + ' ' + T.Nickname AS [Team], COUNT(C.CommentID) AS [Count]" +
+            var results = Database.Query<TeamCommentRow>("SELECT T.Location + ' ' + T.Nickname AS [Team], COUNT(C.CommentID) AS [Count]" +
                                         "FROM Comments C " +
                                         "INNER JOIN Players P " +
                                         "ON	(C.PlayerID = P.PlayerID) " +
@@ -95,9 +97,7 @@ namespace Scouting.RestService.Api
 
         public object Get(CommentGetTotalsByUserRequest request)
         {
-            Database db = new Database("localDB"); // TODO: Use IOC
-
-            var results = db.Query<CommentUserRow>("SELECT U.Picture, U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], COUNT(C.CommentID) AS [Count] " +
+            var results = Database.Query<CommentUserRow>("SELECT U.Picture, U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], COUNT(C.CommentID) AS [Count] " +
                                                    "FROM Comments C " +
                                                    "INNER JOIN Users U " +
                                                    "ON	(C.GoogleID = U.GoogleID) " +
