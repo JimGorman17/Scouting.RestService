@@ -8,33 +8,33 @@ namespace Scouting.DataLayer
 {
     public class Repository<T> : IRepository<T> where T : IEntity
     {
-        protected readonly Database Db = new Database("localDB"); // TODO: Use IOC
+        public Database Database { get; set; }
 
         public T Find(int id)
         {
-            return Db.SingleOrDefault<T>("WHERE Id = @0", id);
+            return Database.SingleOrDefault<T>("WHERE Id = @0", id);
         }
 
         public List<T> GetAll()
         {
-            return Db.Query<T>(String.Empty).ToList();
+            return Database.Query<T>(String.Empty).ToList();
         }
 
         public T Add(T entity)
         {
-            Db.Insert(entity);
+            Database.Insert(entity);
             return entity;
         }
 
         public T Update(T entity)
         {
-            Db.Update(entity);
+            Database.Update(entity);
             return entity;
         }
 
         public void Remove(int id)
         {
-            Db.Delete<T>(id);
+            Database.Delete<T>(id);
         }
 
         public void Save(T entity)

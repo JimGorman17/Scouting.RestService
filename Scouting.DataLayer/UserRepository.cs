@@ -4,7 +4,7 @@
     {
         public User GetUserByGoogleId(string googleId)
         {
-            return Db.SingleOrDefault<User>("WHERE (GoogleID = @0)", googleId);
+            return Database.SingleOrDefault<User>("WHERE (GoogleID = @0)", googleId);
         }
     }
 }
