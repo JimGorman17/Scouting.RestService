@@ -71,8 +71,7 @@ namespace Scouting.RestService
                                 Application = "Scouting.RestService",
                                 CreateDate = DateTimeOffset.Now,
                                 Message = exception.Message,
-                                StackTrace = exception.StackTrace,
-                                OccurredDate = DateTime.Now
+                                StackTrace = exception.StackTrace
                             };
                         container.Resolve<Repository<ErrorLog>>().Add(errorLog);
 
@@ -88,8 +87,7 @@ namespace Scouting.RestService
                         Application = "Scouting.RestService",
                         CreateDate = DateTimeOffset.Now,
                         Message = ex.Message,
-                        StackTrace = ex.StackTrace,
-                        OccurredDate = DateTime.Now
+                        StackTrace = ex.StackTrace
                     };
                     container.Resolve<Repository<ErrorLog>>().Add(errorLog);
 

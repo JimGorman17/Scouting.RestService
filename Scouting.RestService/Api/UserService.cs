@@ -39,6 +39,11 @@ namespace Scouting.RestService.Api
 
         public static string GetGoogleId(string authToken, AuthTokenRepository authTokenRepository, UserRepository userRepository)
         {
+            if (string.IsNullOrEmpty(authToken))
+            {
+                throw new ArgumentNullException("authToken");
+            }
+
             var googleId = authTokenRepository.GetGoogleIdByAuthToken(authToken);
             if (googleId == null)
             {

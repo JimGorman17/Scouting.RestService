@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\CommentService.cs" />
+    <Compile Include="Api\ErrorLogService.cs" />
     <Compile Include="Api\PlayerService.cs" />
     <Compile Include="Api\HttpStatusResult.cs" />
     <Compile Include="Api\TeamService.cs" />

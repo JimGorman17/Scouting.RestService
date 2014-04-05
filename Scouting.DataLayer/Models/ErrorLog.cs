@@ -11,7 +11,6 @@ namespace Scouting.DataLayer.Models
         public string PhoneId { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
-        public DateTime? OccurredDate { get; set; }
         public DateTimeOffset CreateDate { get; set; }
         public int? UserId { get; set; }
         public string GoogleId { get; set; }
