@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
 using Funq;
@@ -46,7 +47,7 @@ namespace Scouting.RestService
 
         public class AppHost : AppHostBase
         {
-            public AppHost() : base("Hello Web Services", typeof(TeamService).Assembly)
+            public AppHost() : base("Scouting.RestService", typeof(TeamService).Assembly)
             {
                 
             }
@@ -60,11 +61,42 @@ namespace Scouting.RestService
                 container.RegisterAutoWired<PlayerRepository>();
                 container.RegisterAutoWired<Repository<Team>>();
                 container.RegisterAutoWired<UserRepository>();
-
                 container.RegisterAutoWired<AuthTokenRepository>();
-            }
+                container.RegisterAutoWired<Repository<ErrorLog>>();
+                
+                ServiceExceptionHandlers.Add((req, request, exception) =>
+                    {
+                        var errorLog = new ErrorLog
+                            {
+                                Application = "Scouting.RestService",
+                                CreateDate = DateTimeOffset.Now,
+                                Message = exception.Message,
+                                StackTrace = exception.StackTrace,
+                                OccurredDate = DateTime.Now
+                            };
+                        container.Resolve<Repository<ErrorLog>>().Add(errorLog);
 
-            // TODO: Configure error logging.
+                        return DtoUtils.CreateErrorResponse(request, exception);
+                    });
+
+                //Handle Unhandled Exceptions occurring outside of Services
+                //E.g. Exceptions during Request binding or in filters:
+                UncaughtExceptionHandlers.Add((req, res, operationName, ex) =>
+                {
+                    var errorLog = new ErrorLog
+                    {
+                        Application = "Scouting.RestService",
+                        CreateDate = DateTimeOffset.Now,
+                        Message = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        OccurredDate = DateTime.Now
+                    };
+                    container.Resolve<Repository<ErrorLog>>().Add(errorLog);
+
+                    res.Write("Error: {0}: {1}".Fmt(ex.GetType().Name, ex.Message));
+                    res.EndRequest(skipHeaders: true);
+                });
+            }
         }
     }
 }
