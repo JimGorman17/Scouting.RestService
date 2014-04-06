@@ -34,7 +34,7 @@ namespace Scouting.DataLayer
         public string Picture { get; set; }
         public string FormattedComment
         {
-            get { return String.Format("{0}<br><br><b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(false) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true, true)); }
+            get { return String.Format("{0} - <b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(false) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true)); }
         }
     }
 }
