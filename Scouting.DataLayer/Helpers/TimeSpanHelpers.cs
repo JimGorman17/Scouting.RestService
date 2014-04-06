@@ -9,7 +9,7 @@ namespace Scouting.DataLayer.Helpers
             return string.Format("{0:0}", span.Days / 365.25);
         }
 
-        public static string ToReadableString(this TimeSpan span, bool showSeconds = true)
+        public static string ToReadableString(this TimeSpan span, bool showSeconds = true, bool appendAgo = false)
         {
             var formatted = string.Format("{0}{1}{2}{3}",
                 0 < span.Duration().Days ? string.Format("{0:0} day{1}", span.Days, span.Days == 1 ? String.Empty : "s") : string.Empty,
@@ -20,6 +20,11 @@ namespace Scouting.DataLayer.Helpers
             if (string.IsNullOrEmpty(formatted) && showSeconds == true)
             {
                 formatted = "0 seconds";
+            }
+
+            if (string.IsNullOrEmpty(formatted) == false && appendAgo == true)
+            {
+                formatted += " ago";
             }
 
             return formatted;
