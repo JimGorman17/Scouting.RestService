@@ -1,4 +1,5 @@
 ﻿using System;
+using Scouting.DataLayer.Helpers;
 using Scouting.DataLayer.Models;
 
 namespace Scouting.DataLayer
@@ -31,5 +32,9 @@ namespace Scouting.DataLayer
         public int UserId { get; set; }
         public string DisplayName { get; set; }
         public string Picture { get; set; }
+        public string FormattedComment
+        {
+            get { return String.Format("{0}<br><br><b><small>{1} ago</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(false) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(false)); }
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace Scouting.RestService.Api
 
         public object Get(CommentGetAllByPlayerIdRequest commentRequest)
         {
-            var comments = CommentRepository.GetAllByPlayerId(commentRequest.PlayerId);
+            var comments = CommentRepository.GetAllByPlayerId(commentRequest.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
 
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
