@@ -46,14 +46,31 @@ namespace Scouting.RestService.Api
         {
             var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
 
-            CommentRepository.Save(new Comment
+            if (request.CommentId == 0)
+            {
+                CommentRepository.Add(new Comment
+                    {
+                        CommentId = request.CommentId,
+                        PlayerId = request.PlayerId,
+                        GoogleId = googleId,
+                        CommentString = request.CommentString.Trim(),
+                        CreateDate = DateTimeOffset.Now,
+                    });
+            }
+            else
+            {
+                var comment = CommentRepository.GetByCommentIdAndGoogleId(request.CommentId, googleId);
+                if (comment == null)
                 {
-                    CommentId = request.CommentId,
-                    PlayerId = request.PlayerId,
-                    GoogleId = googleId,
-                    CommentString = request.CommentString.Trim(),
-                    CreateDate = DateTimeOffset.Now
-                });
+                    throw new UnauthorizedAccessException(
+                        String.Format("Google Id '{0}' is not allowed to modify Comment Id '{1}'.", googleId,
+                                      request.CommentId));
+                }
+
+                comment.CommentString = request.CommentString.Trim();
+                comment.UpdateDate = DateTimeOffset.Now;
+                CommentRepository.Update(comment);
+            }
 
             return new HttpStatusResult(HttpStatusCode.OK);
         }

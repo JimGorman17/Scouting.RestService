@@ -37,12 +37,12 @@ namespace Scouting.DataLayer
         {
             get
             {
-                return (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).Minutes : DateTimeOffset.Now.Subtract(CreateDate).Minutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
+                return (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).TotalMinutes : DateTimeOffset.Now.Subtract(CreateDate).TotalMinutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
             }
         }
         public string FormattedComment
         {
-            get { return String.Format("{0} - <b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(false) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true)); }
+            get { return String.Format("{0} - <b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(true) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true)); }
         }
     }
 }
