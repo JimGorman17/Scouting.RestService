@@ -33,20 +33,22 @@ namespace Scouting.RestService.Api
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
 
-        [Route("/Comment/Create")]
-        public class CommentCreateRequest
+        [Route("/Comment/Save")]
+        public class CommentSaveRequest
         {
+            public int CommentId { get; set; }
             public string AuthToken { get; set; }
             public int PlayerId { get; set; }
             public string CommentString { get; set; }
         }
 
-        public object Post(CommentCreateRequest request)
+        public object Post(CommentSaveRequest request)
         {
             var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
 
-            CommentRepository.Add(new Comment
+            CommentRepository.Save(new Comment
                 {
+                    CommentId = request.CommentId,
                     PlayerId = request.PlayerId,
                     GoogleId = googleId,
                     CommentString = request.CommentString.Trim(),
