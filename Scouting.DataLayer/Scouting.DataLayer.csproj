@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationSettingsKeys.cs" />
     <Compile Include="Helpers\TimeSpanHelpers.cs" />
     <Compile Include="Models\AuthToken.cs" />
     <Compile Include="Models\ErrorLog.cs" />

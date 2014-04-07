@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Scouting.DataLayer.Helpers;
 using Scouting.DataLayer.Models;
 
@@ -32,6 +33,13 @@ namespace Scouting.DataLayer
         public int UserId { get; set; }
         public string DisplayName { get; set; }
         public string Picture { get; set; }
+        public bool CanEditOrDelete
+        {
+            get
+            {
+                return (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).Minutes : DateTimeOffset.Now.Subtract(CreateDate).Minutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
+            }
+        }
         public string FormattedComment
         {
             get { return String.Format("{0} - <b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(false) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true)); }
