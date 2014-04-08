@@ -36,7 +36,7 @@ namespace Scouting.RestService.Api
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
 
-        private void SetCanEditOrDeleteProperty(CommentGetAllByPlayerIdRequest request, List<CommentView> comments)
+        private void SetCanEditOrDeleteProperty(CommentGetAllByPlayerIdRequest request, IEnumerable<CommentView> comments)
         {
             int editOrDeleteTolerance;
             var editOrDeleteToleranceValueExists =
