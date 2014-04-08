@@ -16,6 +16,7 @@ namespace Scouting.RestService.Api
         public AuthTokenRepository AuthTokenRepository { get; set; }
         public UserRepository UserRepository { get; set; }
 
+        #region GetAllByPlayerId
         [Route("/Comment/GetAllByPlayerId")]
         public class CommentGetAllByPlayerIdRequest
         {
@@ -75,7 +76,9 @@ namespace Scouting.RestService.Api
                 }
             }
         }
+        #endregion
 
+        #region Save
         [Route("/Comment/Save")]
         public class CommentSaveRequest
         {
@@ -117,7 +120,9 @@ namespace Scouting.RestService.Api
 
             return new HttpStatusResult(HttpStatusCode.OK);
         }
+        #endregion
 
+        #region GetTotalsByTeam
         [Route("/Comment/GetTotalsByTeam")]
         public class CommentGetTotalsByTeamRequest
         {
@@ -142,7 +147,9 @@ namespace Scouting.RestService.Api
 
             return results;
         }
+        #endregion
 
+        #region GetTotalsByUser
         [Route("/Comment/GetTotalsByUser")]
         public class CommentGetTotalsByUserRequest
         {
@@ -170,5 +177,6 @@ namespace Scouting.RestService.Api
 
             return results.Take(request.NumberOfUsers);
         }
+        #endregion
     }
 }
