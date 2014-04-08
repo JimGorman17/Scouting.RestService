@@ -18,7 +18,7 @@ namespace Scouting.DataLayer
         public string Locale { get; set; }
         public DateTimeOffset CreateDate { get; set; }
         public DateTimeOffset? UpdateDate { get; set; }
-        public int FavoriteTeamId { get; set; }
+        public int? FavoriteTeamId { get; set; }
 
         [Ignore]
         public bool IsNew

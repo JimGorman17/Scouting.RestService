@@ -18,6 +18,7 @@ namespace Scouting.RestService.Api
         [Route("/Comment/GetAllByPlayerId")]
         public class CommentGetAllByPlayerIdRequest
         {
+            public string AuthToken { get; set; }
             public int PlayerId { get; set; }
         }
 
@@ -26,9 +27,26 @@ namespace Scouting.RestService.Api
             public List<CommentView> Comments { get; set; }
         }
 
-        public object Get(CommentGetAllByPlayerIdRequest commentRequest)
+        public object Post(CommentGetAllByPlayerIdRequest request)
         {
-            var comments = CommentRepository.GetAllByPlayerId(commentRequest.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
+            var comments = CommentRepository.GetAllByPlayerId(request.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
+
+            if (String.IsNullOrEmpty(request.AuthToken) == false)
+            {
+                try
+                {
+                    var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
+                    foreach (var commentView in comments)
+                    {
+                        commentView.ViewingUsersGoogleId = googleId;
+                    }
+                }
+// ReSharper disable EmptyGeneralCatchClause
+                catch
+// ReSharper restore EmptyGeneralCatchClause
+                {
+                }
+            }
 
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }

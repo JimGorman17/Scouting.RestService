@@ -44,13 +44,28 @@ namespace Scouting.RestService.Api
                 throw new ArgumentNullException("authToken");
             }
 
+            User user;
             var googleId = authTokenRepository.GetGoogleIdByAuthToken(authToken);
             if (googleId == null)
             {
-                var user = RecordTheAuthTokenInTheDatabase(authToken, authTokenRepository);
+                user = RecordTheAuthTokenInTheDatabase(authToken, authTokenRepository);
                 googleId = user.GoogleId;
-                AddOrUpdateTheUser(user, userRepository);
             }
+            else
+            {
+                user = userRepository.GetUserByGoogleId(googleId);
+                if (user == null)
+                {
+                    var googlePlusLoginDto = GetGooglePlusLoginDto(authToken);
+                    if (googlePlusLoginDto == null || String.IsNullOrEmpty(googlePlusLoginDto.id))
+                    {
+                        throw new ArgumentException(String.Format("Unable to retrieve a Google user for auth token: '{0}'.", authToken));
+                    }
+
+                    user = Mapper.Map<GooglePlusLoginDto, User>(googlePlusLoginDto);
+                }
+            }
+            AddOrUpdateTheUser(user, userRepository);
             return googleId;
         }
 

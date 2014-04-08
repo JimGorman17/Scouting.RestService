@@ -33,11 +33,15 @@ namespace Scouting.DataLayer
         public int UserId { get; set; }
         public string DisplayName { get; set; }
         public string Picture { get; set; }
+        public string ViewingUsersGoogleId { get; set; }
         public bool CanEditOrDelete
         {
             get
             {
-                return (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).TotalMinutes : DateTimeOffset.Now.Subtract(CreateDate).TotalMinutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
+                return
+                    String.IsNullOrEmpty(ViewingUsersGoogleId) == false &&
+                    ViewingUsersGoogleId.Trim().Equals(GoogleId.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                    (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).TotalMinutes : DateTimeOffset.Now.Subtract(CreateDate).TotalMinutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
             }
         }
         public string FormattedComment
