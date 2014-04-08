@@ -33,17 +33,8 @@ namespace Scouting.DataLayer
         public int UserId { get; set; }
         public string DisplayName { get; set; }
         public string Picture { get; set; }
-        public string ViewingUsersGoogleId { get; set; }
-        public bool CanEditOrDelete
-        {
-            get
-            {
-                return
-                    String.IsNullOrEmpty(ViewingUsersGoogleId) == false &&
-                    ViewingUsersGoogleId.Trim().Equals(GoogleId.Trim(), StringComparison.OrdinalIgnoreCase) &&
-                    (UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).TotalMinutes : DateTimeOffset.Now.Subtract(CreateDate).TotalMinutes) < int.Parse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes]);
-            }
-        }
+        public bool CanEditOrDelete { get; set; }
+
         public string FormattedComment
         {
             get { return String.Format("{0} - <b><small>{1}</small></b>", CommentString.Trim(), UpdateDate.HasValue ? DateTimeOffset.Now.Subtract(UpdateDate.Value).ToReadableString(true) : DateTimeOffset.Now.Subtract(CreateDate).ToReadableString(true)); }

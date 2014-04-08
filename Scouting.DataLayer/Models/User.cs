@@ -19,6 +19,7 @@ namespace Scouting.DataLayer
         public DateTimeOffset CreateDate { get; set; }
         public DateTimeOffset? UpdateDate { get; set; }
         public int? FavoriteTeamId { get; set; }
+        public bool IsAdmin { get; set; }
 
         [Ignore]
         public bool IsNew

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using Scouting.DataLayer;
@@ -30,15 +31,41 @@ namespace Scouting.RestService.Api
         public object Post(CommentGetAllByPlayerIdRequest request)
         {
             var comments = CommentRepository.GetAllByPlayerId(request.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
+            SetCanEditOrDeleteProperty(request, comments);
+
+            return new CommentGetAllByPlayerIdResponse { Comments = comments };
+        }
+
+        private void SetCanEditOrDeleteProperty(CommentGetAllByPlayerIdRequest request, List<CommentView> comments)
+        {
+            int editOrDeleteTolerance;
+            var editOrDeleteToleranceValueExists =
+                int.TryParse(ConfigurationManager.AppSettings[ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes],
+                             out editOrDeleteTolerance);
+            if (editOrDeleteToleranceValueExists == false)
+            {
+                throw new ConfigurationErrorsException(String.Format("{0} does not exist in web.config",
+                                                                     ApplicationSettingsKeys.EditOrDeleteToleranceInMinutes));
+            }
 
             if (String.IsNullOrEmpty(request.AuthToken) == false)
             {
                 try
                 {
                     var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
+                    var user = UserRepository.GetUserByGoogleId(googleId);
                     foreach (var commentView in comments)
                     {
-                        commentView.ViewingUsersGoogleId = googleId;
+                        if (user.IsAdmin ||
+                            (googleId.Equals(commentView.GoogleId, StringComparison.OrdinalIgnoreCase) &&
+                             (commentView.UpdateDate.HasValue
+                                  ? DateTimeOffset.Now.Subtract(commentView.UpdateDate.Value).TotalMinutes
+                                  : DateTimeOffset.Now.Subtract(commentView.CreateDate).TotalMinutes) < editOrDeleteTolerance
+                            )
+                            )
+                        {
+                            commentView.CanEditOrDelete = true;
+                        }
                     }
                 }
 // ReSharper disable EmptyGeneralCatchClause
@@ -47,8 +74,6 @@ namespace Scouting.RestService.Api
                 {
                 }
             }
-
-            return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
 
         [Route("/Comment/Save")]
