@@ -63,6 +63,7 @@ namespace Scouting.RestService
                 container.RegisterAutoWired<UserRepository>();
                 container.RegisterAutoWired<AuthTokenRepository>();
                 container.RegisterAutoWired<Repository<ErrorLog>>();
+                container.RegisterAutoWired<Repository<FlaggedComment>>();
                 
                 ServiceExceptionHandlers.Add((req, request, exception) =>
                     {

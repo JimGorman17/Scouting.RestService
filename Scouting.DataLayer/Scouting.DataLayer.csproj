@@ -49,6 +49,7 @@
     <Compile Include="Helpers\TimeSpanHelpers.cs" />
     <Compile Include="Models\AuthToken.cs" />
     <Compile Include="Models\ErrorLog.cs" />
+    <Compile Include="Models\FlaggedComment.cs" />
     <Compile Include="Repositories\AuthTokenRepository.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Repositories\CommentRepository.cs" />

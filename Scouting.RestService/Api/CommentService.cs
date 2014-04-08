@@ -15,6 +15,7 @@ namespace Scouting.RestService.Api
         public CommentRepository CommentRepository { get; set; }
         public AuthTokenRepository AuthTokenRepository { get; set; }
         public UserRepository UserRepository { get; set; }
+        public Repository<FlaggedComment> FlaggedCommentRepository { get; set; }
 
         #region GetAllByPlayerId
         [Route("/Comment/GetAllByPlayerId")]
@@ -87,6 +88,7 @@ namespace Scouting.RestService.Api
             public int PlayerId { get; set; }
             public string CommentString { get; set; }
             public bool Delete { get; set; }
+            public bool Flagged { get; set; }
         }
 
         public object Post(CommentSaveRequest request)
@@ -104,6 +106,15 @@ namespace Scouting.RestService.Api
                         CreateDate = DateTimeOffset.Now,
                     });
             }
+            else if (request.Flagged)
+            {
+                FlaggedCommentRepository.Add(new FlaggedComment
+                {
+                    CommentId = request.CommentId,
+                    GoogleId = googleId,
+                    FlaggedDate = DateTimeOffset.Now
+                });
+            }
             else
             {
                 var comment = CommentRepository.GetByCommentIdAndGoogleId(request.CommentId, googleId);
@@ -114,7 +125,7 @@ namespace Scouting.RestService.Api
                         String.Format("Google Id '{0}' is not allowed to modify Comment Id '{1}'.", googleId,
                                       request.CommentId));
                 }
-
+                
                 if (request.Delete)
                 {
                     comment.Deleted = true;
