@@ -86,6 +86,7 @@ namespace Scouting.RestService.Api
             public string AuthToken { get; set; }
             public int PlayerId { get; set; }
             public string CommentString { get; set; }
+            public bool Delete { get; set; }
         }
 
         public object Post(CommentSaveRequest request)
@@ -106,14 +107,23 @@ namespace Scouting.RestService.Api
             else
             {
                 var comment = CommentRepository.GetByCommentIdAndGoogleId(request.CommentId, googleId);
-                if (comment == null)
+                var user = UserRepository.GetUserByGoogleId(googleId);
+                if (comment == null || user.IsAdmin == false)
                 {
                     throw new UnauthorizedAccessException(
                         String.Format("Google Id '{0}' is not allowed to modify Comment Id '{1}'.", googleId,
                                       request.CommentId));
                 }
 
-                comment.CommentString = request.CommentString.Trim();
+                if (request.Delete)
+                {
+                    comment.Deleted = true;
+                }
+                else
+                {
+                    comment.CommentString = request.CommentString.Trim();
+                }
+
                 comment.UpdateDate = DateTimeOffset.Now;
                 CommentRepository.Update(comment);
             }
