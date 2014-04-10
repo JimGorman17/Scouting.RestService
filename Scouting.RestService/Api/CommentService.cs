@@ -70,7 +70,8 @@ namespace Scouting.RestService.Api
                             commentView.CanEditOrDelete = true;
                         }
 
-                        if ((user.IsAdmin || googleId.Equals(commentView.GoogleId, StringComparison.OrdinalIgnoreCase) == false) &&
+                        if (user.IsAdmin == false &&
+                            googleId.Equals(commentView.GoogleId, StringComparison.OrdinalIgnoreCase) == false &&
                             FlaggedCommentRepository.GetUnhandledCommentsByFlaggedCommentByCommentIdAndGoogleId(commentView.CommentId, googleId).Any() == false)
                         {
                             commentView.CanFlag = true;
