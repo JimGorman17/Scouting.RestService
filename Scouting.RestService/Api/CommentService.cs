@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Scouting.DataLayer;
 using Scouting.DataLayer.Models;
+using Scouting.DataLayer.Repositories;
 using ServiceStack;
 
 namespace Scouting.RestService.Api
@@ -15,7 +16,7 @@ namespace Scouting.RestService.Api
         public CommentRepository CommentRepository { get; set; }
         public AuthTokenRepository AuthTokenRepository { get; set; }
         public UserRepository UserRepository { get; set; }
-        public Repository<FlaggedComment> FlaggedCommentRepository { get; set; }
+        public FlaggedCommentRepository FlaggedCommentRepository { get; set; }
 
         #region GetAllByPlayerId
         [Route("/Comment/GetAllByPlayerId")]
@@ -33,12 +34,12 @@ namespace Scouting.RestService.Api
         public object Post(CommentGetAllByPlayerIdRequest request)
         {
             var comments = CommentRepository.GetAllByPlayerId(request.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
-            SetCanEditOrDeleteProperty(request, comments);
+            SetCommentViewProperties(request, comments);
 
             return new CommentGetAllByPlayerIdResponse { Comments = comments };
         }
 
-        private void SetCanEditOrDeleteProperty(CommentGetAllByPlayerIdRequest request, IEnumerable<CommentView> comments)
+        private void SetCommentViewProperties(CommentGetAllByPlayerIdRequest request, IEnumerable<CommentView> comments)
         {
             int editOrDeleteTolerance;
             var editOrDeleteToleranceValueExists =
@@ -67,6 +68,12 @@ namespace Scouting.RestService.Api
                             )
                         {
                             commentView.CanEditOrDelete = true;
+                        }
+
+                        if ((user.IsAdmin || googleId.Equals(commentView.GoogleId, StringComparison.OrdinalIgnoreCase) == false) &&
+                            FlaggedCommentRepository.GetUnhandledCommentsByFlaggedCommentByCommentIdAndGoogleId(commentView.CommentId, googleId).Any() == false)
+                        {
+                            commentView.CanFlag = true;
                         }
                     }
                 }

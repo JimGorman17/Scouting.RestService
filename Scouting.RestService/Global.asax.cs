@@ -5,6 +5,7 @@ using AutoMapper;
 using Funq;
 using Scouting.DataLayer;
 using Scouting.DataLayer.Models;
+using Scouting.DataLayer.Repositories;
 using Scouting.RestService.Api;
 using Scouting.RestService.App_Start;
 using Scouting.RestService.Dtos;
@@ -64,7 +65,7 @@ namespace Scouting.RestService
                 container.RegisterAutoWired<UserRepository>();
                 container.RegisterAutoWired<AuthTokenRepository>();
                 container.RegisterAutoWired<Repository<ErrorLog>>();
-                container.RegisterAutoWired<Repository<FlaggedComment>>();
+                container.RegisterAutoWired<FlaggedCommentRepository>();
                 
                 ServiceExceptionHandlers.Add((req, request, exception) =>
                     {

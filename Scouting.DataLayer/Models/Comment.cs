@@ -34,6 +34,7 @@ namespace Scouting.DataLayer
         public string DisplayName { get; set; }
         public string Picture { get; set; }
         public bool CanEditOrDelete { get; set; }
+        public bool CanFlag { get; set; }
 
         public string FormattedComment
         {

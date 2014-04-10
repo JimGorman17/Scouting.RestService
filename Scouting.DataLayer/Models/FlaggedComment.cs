@@ -10,6 +10,7 @@ namespace Scouting.DataLayer.Models
         public int CommentId { get; set; }
         public string GoogleId { get; set; }
         public DateTimeOffset FlaggedDate { get; set; }
+        public bool Handled { get; set; }
 
         [Ignore]
         public bool IsNew
