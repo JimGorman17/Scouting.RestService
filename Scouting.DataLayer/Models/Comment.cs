@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using Scouting.DataLayer.Helpers;
 using Scouting.DataLayer.Models;
 
