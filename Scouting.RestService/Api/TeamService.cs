@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.SqlServer.Types;
 using Scouting.DataLayer;
-using ServiceStack;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
 
 namespace Scouting.RestService.Api
 {

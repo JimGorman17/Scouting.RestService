@@ -2,7 +2,8 @@
 using System.Net;
 using Scouting.DataLayer;
 using Scouting.DataLayer.Models;
-using ServiceStack;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
 
 namespace Scouting.RestService.Api
 {

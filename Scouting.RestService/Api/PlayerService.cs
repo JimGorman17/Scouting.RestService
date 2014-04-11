@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Scouting.DataLayer;
-using ServiceStack;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
 
 namespace Scouting.RestService.Api
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
@@ -10,6 +11,10 @@ using Scouting.RestService.Api;
 using Scouting.RestService.App_Start;
 using Scouting.RestService.Dtos;
 using ServiceStack;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack.Text;
+using ServiceStack.WebHost.Endpoints;
 
 namespace Scouting.RestService
 {
@@ -56,7 +61,7 @@ namespace Scouting.RestService
 
             public override void Configure(Container container)
             {
-                SetConfig(new HostConfig { HandlerFactoryPath = "api" });
+                SetConfig(new EndpointHostConfig { ServiceStackHandlerFactoryPath = "api" });
 
                 container.Register(c => new Database("localDB"));
                 container.RegisterAutoWired<CommentRepository>();
@@ -67,7 +72,7 @@ namespace Scouting.RestService
                 container.RegisterAutoWired<Repository<ErrorLog>>();
                 container.RegisterAutoWired<FlaggedCommentRepository>();
                 
-                ServiceExceptionHandlers.Add((req, request, exception) =>
+                ServiceExceptionHandler = (req, request, exception) =>
                     {
                         var errorLog = new ErrorLog
                             {
@@ -78,12 +83,12 @@ namespace Scouting.RestService
                             };
                         container.Resolve<Repository<ErrorLog>>().Add(errorLog);
 
-                        return DtoUtils.CreateErrorResponse(request, exception);
-                    });
+                        return DtoUtils.CreateErrorResponse(request, exception, new ResponseStatus(HttpStatusCode.InternalServerError.ToString()));
+                    };
 
                 //Handle Unhandled Exceptions occurring outside of Services
                 //E.g. Exceptions during Request binding or in filters:
-                UncaughtExceptionHandlers.Add((req, res, operationName, ex) =>
+                ExceptionHandler = (req, res, operationName, ex) =>
                 {
                     var errorLog = new ErrorLog
                     {
@@ -96,7 +101,7 @@ namespace Scouting.RestService
 
                     res.Write("Error: {0}: {1}".Fmt(ex.GetType().Name, ex.Message));
                     res.EndRequest(skipHeaders: true);
-                });
+                };
             }
         }
     }

@@ -4,7 +4,8 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Scouting.DataLayer;
 using Scouting.RestService.Dtos;
-using ServiceStack;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
 
 namespace Scouting.RestService.Api
 {
@@ -12,6 +13,26 @@ namespace Scouting.RestService.Api
     {
         public UserRepository UserRepository { get; set; }
         public AuthTokenRepository AuthTokenRepository { get; set; }
+
+        [Route("/User/GetAdminStatus")]
+        public class UserGetAdminStatus
+        {
+            public string AuthToken { get; set; }
+        }
+
+        public object Get(UserGetAdminStatus request)
+        {
+            try
+            {
+                var googleId = GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
+                var existingUser = UserRepository.GetUserByGoogleId(googleId);
+                return existingUser.IsAdmin;
+            }
+            catch
+            {
+                return new HttpStatusResult(HttpStatusCode.Unauthorized);
+            }
+        }
 
         [Route("/User/UpdateFavoriteTeam")]
         public class UserUpdateFavoriteTeamRequest
