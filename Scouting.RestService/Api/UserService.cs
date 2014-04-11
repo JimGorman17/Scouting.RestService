@@ -15,18 +15,23 @@ namespace Scouting.RestService.Api
         public AuthTokenRepository AuthTokenRepository { get; set; }
 
         [Route("/User/GetAdminStatus")]
-        public class UserGetAdminStatus
+        public class UserGetAdminStatusRequest
         {
             public string AuthToken { get; set; }
         }
 
-        public object Get(UserGetAdminStatus request)
+        public class UserGetAdminStatusResponse
+        {
+            public bool IsAdmin { get; set; }
+        }
+
+        public object Post(UserGetAdminStatusRequest request)
         {
             try
             {
                 var googleId = GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
                 var existingUser = UserRepository.GetUserByGoogleId(googleId);
-                return existingUser.IsAdmin;
+                return new UserGetAdminStatusResponse {IsAdmin = existingUser.IsAdmin};
             }
             catch
             {
