@@ -126,9 +126,9 @@ namespace Scouting.RestService.Api
             }
             else
             {
-                var comment = CommentRepository.GetByCommentIdAndGoogleId(request.CommentId, googleId);
+                var comment = CommentRepository.GetByCommentId(request.CommentId);
                 var user = UserRepository.GetUserByGoogleId(googleId);
-                if (comment == null || user.IsAdmin == false)
+                if (comment == null || (comment.GoogleId != googleId && user.IsAdmin == false))
                 {
                     throw new UnauthorizedAccessException(
                         String.Format("Google Id '{0}' is not allowed to modify Comment Id '{1}'.", googleId,

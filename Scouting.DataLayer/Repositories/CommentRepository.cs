@@ -6,9 +6,9 @@ namespace Scouting.DataLayer
 {
     public class CommentRepository : Repository<Comment>
     {
-        public Comment GetByCommentIdAndGoogleId(int commentId, string googleId)
+        public Comment GetByCommentId(int commentId)
         {
-            return Database.SingleOrDefault<Comment>("WHERE (CommentID = @0) AND (GoogleID = @1)", commentId, googleId);
+            return Database.SingleOrDefault<Comment>("WHERE (CommentID = @0)", commentId);
         }
 
         public List<CommentView> GetAllByPlayerId(int playerId)
