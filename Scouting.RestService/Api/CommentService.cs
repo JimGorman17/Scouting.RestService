@@ -138,6 +138,7 @@ namespace Scouting.RestService.Api
                 if (request.Delete)
                 {
                     comment.Deleted = true;
+                    FlaggedCommentRepository.HandleByCommentId(request.CommentId);
                 }
                 else
                 {
