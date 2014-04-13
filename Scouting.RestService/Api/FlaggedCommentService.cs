@@ -38,5 +38,35 @@ namespace Scouting.RestService.Api
 
             return FlaggedCommentRepository.GetFlaggedCommentsForModerator();
         }
+
+        [Route("/FlaggedComment/IgnoreFlags")]
+        public class IgnoreCommentsRequest
+        {
+            public int CommentId { get; set; }
+            public string AuthToken { get; set; }
+        }
+
+        public object Post(IgnoreCommentsRequest request)
+        {
+            User user;
+            try
+            {
+                var googleId = UserService.GetGoogleId(request.AuthToken, AuthTokenRepository, UserRepository);
+                user = UserRepository.GetUserByGoogleId(googleId);
+            }
+            catch
+            {
+                return new HttpStatusResult(HttpStatusCode.Unauthorized);
+            }
+
+            if (user.IsAdmin == false)
+            {
+                return new HttpStatusResult(HttpStatusCode.Forbidden);
+            }
+
+            FlaggedCommentRepository.HandleByCommentId(request.CommentId);
+
+            return new HttpStatusResult(HttpStatusCode.OK);
+        }
     }
 }

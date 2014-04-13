@@ -31,5 +31,10 @@ namespace Scouting.DataLayer.Repositories
 
             return results.ToList();
         }
+
+        public void HandleByCommentId(int commentId)
+        {
+            Database.Update<FlaggedComment>("SET Handled=@0 WHERE (CommentID = @1) AND (Handled = @2)", true, commentId, false);
+        }
     }
 }
