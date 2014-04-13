@@ -14,7 +14,7 @@ namespace Scouting.DataLayer.Repositories
         public List<FlaggedCommentForModerator> GetFlaggedCommentsForModerator()
         {
             var results = Database.Query<FlaggedCommentForModerator>(
-                "SELECT C.CommentID, C.Comment, COALESCE(C.UpdateDate, C.CreateDate) AS [UpdateDate], COUNT(C.CommentID) AS [Count] " +
+                "SELECT C.CommentID, C.Comment, COALESCE(C.UpdateDate, C.CreateDate) AS [UpdateDate], COUNT(C.CommentID) AS [NumberOfFlags] " +
                 "FROM FlaggedComments FC " +
                 "INNER JOIN Comments C " +
                 "ON	(FC.CommentID = C.CommentID) AND " +

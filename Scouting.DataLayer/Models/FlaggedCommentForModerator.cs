@@ -15,6 +15,6 @@ namespace Scouting.DataLayer.Models
                 return DateTimeOffset.Now.Subtract(UpdateDate).ToReadableString(true);
             }
         }
-        public int Count { get; set; }
+        public int NumberOfFlags { get; set; }
     }
 }
