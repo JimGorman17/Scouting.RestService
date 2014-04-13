@@ -8,7 +8,7 @@ namespace Scouting.DataLayer.Models
         public int CommentId { get; set; }
         public string Comment { get; set; }
         public DateTimeOffset UpdateDate { get; set; }
-        public string UpdateReadableString
+        public string LastUpdated
         {
             get
             {
