@@ -6,7 +6,6 @@ using System.Net;
 using Scouting.DataLayer;
 using Scouting.DataLayer.Models;
 using Scouting.DataLayer.Repositories;
-using ServiceStack;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
