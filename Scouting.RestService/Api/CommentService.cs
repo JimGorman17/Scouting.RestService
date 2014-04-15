@@ -97,6 +97,7 @@ namespace Scouting.RestService.Api
             public string CommentString { get; set; }
             public bool Delete { get; set; }
             public bool Flagged { get; set; }
+            public bool HandleFlags { get; set; }
         }
 
         public object Post(CommentSaveRequest request)
@@ -141,6 +142,10 @@ namespace Scouting.RestService.Api
                 }
                 else
                 {
+                    if (request.HandleFlags && user.IsAdmin)
+                    {
+                        FlaggedCommentRepository.HandleByCommentId(request.CommentId);
+                    }
                     comment.CommentString = request.CommentString.Trim();
                 }
 
