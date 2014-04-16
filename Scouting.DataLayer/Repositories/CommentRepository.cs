@@ -34,7 +34,7 @@ namespace Scouting.DataLayer
         public List<CommentUserRow> GetTotalsByUser(int numberOfUsers)
         {
             var results = Database.Query<CommentUserRow>(
-                "SELECT U.Picture, U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], COUNT(C.CommentID) AS [Count] " +
+                "SELECT U.Picture, U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], MAX(COALESCE(C.UpdateDate, C.CreateDate)) AS [LastPostDate], COUNT(C.CommentID) AS [Count] " +
                 "FROM Comments C " +
                 "INNER JOIN Users U " +
                 "ON	(C.GoogleID = U.GoogleID) " +
