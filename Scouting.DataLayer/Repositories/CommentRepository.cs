@@ -19,15 +19,14 @@ namespace Scouting.DataLayer
         public List<TeamCommentRow> GetTotalsByTeam()
         {
             var results = Database.Query<TeamCommentRow>(
-                "SELECT T.Location + ' ' + T.Nickname AS [Team], COUNT(C.CommentID) AS [Count]" +
-                "FROM Comments C " +
+                "SELECT T.Location + ' ' + T.Nickname AS [Team], COUNT(C.CommentID) AS [Count] " +
+                "FROM Teams T " +
                 "INNER JOIN Players P " +
-                "ON	(C.PlayerID = P.PlayerID) " +
-                "INNER JOIN Teams T " +
-                "ON	(P.Team = T.Abbreviation) " +
-                "WHERE (C.Deleted = 0) " +
+                "ON	(T.Abbreviation = P.Team) " +
+                "LEFT OUTER JOIN Comments C " +
+                "ON	(P.PlayerID = C.PlayerID) AND (C.Deleted = 0) " +
                 "GROUP BY T.Location, T.Nickname " +
-                "ORDER BY COUNT(C.CommentID) DESC");
+                "ORDER BY COUNT(C.CommentID) DESC, T.Location, T.Nickname");
 
             return results.ToList();
         }
