@@ -5,7 +5,7 @@ namespace Scouting.DataLayer.Models
 {
     public class CommentUserRow
     {
-        public string Picture { get; set; }
+        public string PictureUrl { get; set; }
         public string DisplayName { get; set; }
         public string FavoriteTeam { get; set; }
         public int Count { get; set; }
@@ -16,6 +16,11 @@ namespace Scouting.DataLayer.Models
             {
                 return DateTimeOffset.Now.Subtract(LastPostDate).ToReadableString(true);
             }
+        }
+
+        public string UserInfo
+        {
+            get { return String.Format("{0}<br><small>Favorite Team: {1}<br>Last Post: {2}</small>", DisplayName, FavoriteTeam, LastPostDateString); }
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Scouting.DataLayer
                 "ON	(C.PlayerID = P.PlayerID) " +
                 "INNER JOIN Teams T " +
                 "ON	(P.Team = T.Abbreviation) " +
+                "WHERE (C.Deleted = 0) " +
                 "GROUP BY T.Location, T.Nickname " +
                 "ORDER BY COUNT(C.CommentID) DESC");
 
@@ -34,12 +35,13 @@ namespace Scouting.DataLayer
         public List<CommentUserRow> GetTotalsByUser(int numberOfUsers)
         {
             var results = Database.Query<CommentUserRow>(
-                "SELECT U.Picture, U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], MAX(COALESCE(C.UpdateDate, C.CreateDate)) AS [LastPostDate], COUNT(C.CommentID) AS [Count] " +
+                "SELECT U.Picture AS [PictureUrl], U.DisplayName, T.Location + ' ' + T.Nickname AS [FavoriteTeam], MAX(COALESCE(C.UpdateDate, C.CreateDate)) AS [LastPostDate], COUNT(C.CommentID) AS [Count] " +
                 "FROM Comments C " +
                 "INNER JOIN Users U " +
                 "ON	(C.GoogleID = U.GoogleID) " +
                 "LEFT OUTER JOIN Teams T " +
-                "ON (U.FavoriteTeamID = T.TeamID)" +
+                "ON (U.FavoriteTeamID = T.TeamID) " +
+                "WHERE (C.Deleted = 0) " +
                 "GROUP BY U.Picture, U.DisplayName, T.Location, T.Nickname " +
                 "ORDER BY COUNT(C.CommentID) DESC");
 
