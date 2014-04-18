@@ -17,16 +17,9 @@ namespace Scouting.RestService.Api
         {
         }
 
-        public class TeamGetAllResponse
-        {
-            public List<Team> Teams { get; set; }
-        }
-
         public object Get(TeamGetAllRequest request)
         {
-            var teams = TeamRepository.GetAll();
-
-            return new TeamGetAllResponse { Teams = teams };
+            return TeamRepository.GetAll();
         }
 
         [Route("/Team/GetClosestTeam")]
@@ -35,22 +28,15 @@ namespace Scouting.RestService.Api
             public double Latitude { get; set; }
             public double Longitude { get; set; }
         }
-
-        public class TeamGetClosestTeamResponse
-        {
-            public Team Team { get; set; }
-        }
-
+        
         public object Get(TeamGetClosestTeamRequest request)
         {
             var givenPoint = SqlGeography.Point(request.Latitude, request.Longitude, 4326);
             var allTeams = TeamRepository.GetAll();
 
-            var nearest = allTeams.OrderBy(t => t.CenterPoint.STDistance(givenPoint))
+            return allTeams.OrderBy(t => t.CenterPoint.STDistance(givenPoint))
                 .ThenBy(t => Guid.NewGuid()) // Randomize so that we can give the NY Giants and the NY Jets both an equal chance.
                 .First();
-
-            return new TeamGetClosestTeamResponse { Team = nearest };
         }
     }
 }

@@ -26,17 +26,12 @@ namespace Scouting.RestService.Api
             public int PlayerId { get; set; }
         }
 
-        public class CommentGetAllByPlayerIdResponse
-        {
-            public List<CommentView> Comments { get; set; }
-        }
-
         public object Post(CommentGetAllByPlayerIdRequest request)
         {
             var comments = CommentRepository.GetAllByPlayerId(request.PlayerId).OrderByDescending(c => c.CreateDate).ToList();
             SetCommentViewProperties(request, comments);
 
-            return new CommentGetAllByPlayerIdResponse { Comments = comments };
+            return comments;
         }
 
         private void SetCommentViewProperties(CommentGetAllByPlayerIdRequest request, IEnumerable<CommentView> comments)
