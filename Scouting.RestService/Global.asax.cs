@@ -63,7 +63,7 @@ namespace Scouting.RestService
             {
                 SetConfig(new EndpointHostConfig { ServiceStackHandlerFactoryPath = "api" });
 
-                container.Register(c => new Database("localDB"));
+                container.Register(c => new Database("localDB")).ReusedWithin(ReuseScope.Request);
                 container.RegisterAutoWired<CommentRepository>();
                 container.RegisterAutoWired<PlayerRepository>();
                 container.RegisterAutoWired<Repository<Team>>();
