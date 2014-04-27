@@ -64,13 +64,13 @@ namespace Scouting.RestService
                 SetConfig(new EndpointHostConfig { ServiceStackHandlerFactoryPath = "api" });
 
                 container.Register(c => new Database("localDB")).ReusedWithin(ReuseScope.Request);
-                container.RegisterAutoWired<CommentRepository>();
-                container.RegisterAutoWired<PlayerRepository>();
-                container.RegisterAutoWired<Repository<Team>>();
-                container.RegisterAutoWired<UserRepository>();
-                container.RegisterAutoWired<AuthTokenRepository>();
-                container.RegisterAutoWired<Repository<ErrorLog>>();
-                container.RegisterAutoWired<FlaggedCommentRepository>();
+                container.RegisterAutoWired<CommentRepository>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<PlayerRepository>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<Repository<Team>>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<UserRepository>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<AuthTokenRepository>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<Repository<ErrorLog>>().ReusedWithin(ReuseScope.Request);
+                container.RegisterAutoWired<FlaggedCommentRepository>().ReusedWithin(ReuseScope.Request);
                 
                 ServiceExceptionHandler = (req, request, exception) =>
                     {
